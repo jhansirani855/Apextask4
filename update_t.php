@@ -1,4 +1,5 @@
 <?php
+require 'config.php';
 session_start();
 
 if (!isset($_SESSION['username'])) {
@@ -6,12 +7,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-$servername = "localhost";
-$username_db = "root";
-$password = "";
-$dbname = "blog"; 
-
-$conn = new mysqli($servername, $username_db, $password, $dbname);
 
 if($conn->connect_error){
     die("Connection failed: " . $conn->connect_error);

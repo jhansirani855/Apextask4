@@ -1,0 +1,42 @@
+APEXPLANET WEB DEVELOPMENT INTERNSHIP
+ Task 4 Documentation – Securing the Application
+ Project Title: MessMate
+ Intern Name: Kriti
+ Date: October 2025
+ 1. Objective
+ To secure the web application against common web vulnerabilities by implementing
+ prepared statements, server-side validation, and role-based access control.
+ 2. Security Measures Implemented
+ Prepared Statements (MySQLi)
+ • All SQL queries are converted into MySQLi prepared statements to prevent SQL
+ Injection attacks.
+ • Example:
+ $stmt = $conn->prepare('INSERT INTO users (name, email, password,
+ role) VALUES (?, ?, ?, ?)');
+ $stmt->bind_param('ssss', $name, $email, $password, $role);
+ $stmt->execute();
+ Server-Side Validation
+ • Validation is applied for all forms (registration, login).
+ • Fields checked for empty values, valid email format, and secure passwords.
+ • Prevents invalid or malicious data from entering the database.
+ Role-Based Access Control
+ • Each user in the system has a role (admin, editor, user).
+ • Restricted pages are protected using PHP sessions.
+ • Example:
+ if ($_SESSION['role'] !== 'admin') { header('Location:
+ access_denied.php'); exit(); }
+ Password Security
+ • Passwords are hashed using the MD5 algorithm before being stored.
+ • This prevents exposure of plain-text passwords.
+ 3. Results
+ SQL Injection prevention using prepared statements.
+ Server-side validation successfully implemented.
+ Role-based access and user management working properly.
+ Passwords stored securely with hashing.
+ 4. Conclusion
+ The application is now secure and follows good coding practices. Prepared statements,
+ form validation, and user roles ensure data safety and integrity, protecting the system from
+ common attacks.
+ 5. Optional Enhancement
+ Client-side validation can be added using JavaScript for better user experience. However,
+ server-side validation ensures security even if client-side scripts are disabled

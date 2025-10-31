@@ -1,22 +1,16 @@
 <?php
 session_start();
 
+// ✅ Include database connection
+include 'config.php'; // change to ../config.php if delete.php is in a subfolder
+
+// ✅ Check if user is logged in
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-$servername = "localhost";
-$username_db = "root";
-$password = "";
-$dbname = "blog";
-
-$conn = new mysqli($servername, $username_db, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Check if username is provided
+// ✅ Check if username to delete is provided
 if (!isset($_GET['username']) || empty($_GET['username'])) {
     die("Error: No username specified for deletion.");
 }
@@ -24,7 +18,7 @@ if (!isset($_GET['username']) || empty($_GET['username'])) {
 $username_to_delete = $_GET['username'];
 $is_self_deletion = ($username_to_delete === $_SESSION['username']);
 
-// Fetch current user's role (PHP 5.2 compatible)
+// ✅ Get current user role
 $stmt_role = $conn->prepare("SELECT role FROM users WHERE username=?");
 $stmt_role->bind_param("s", $_SESSION['username']);
 $stmt_role->execute();
@@ -32,12 +26,12 @@ $stmt_role->bind_result($current_user_role);
 $stmt_role->fetch();
 $stmt_role->close();
 
-// Only admin can delete others
+// ✅ Only admin can delete others
 if (!$is_self_deletion && $current_user_role !== 'admin') {
     die("Error: You do not have permission to delete other users.");
 }
 
-// Fetch profile picture (optional cleanup)
+// ✅ Get profile picture (if any)
 $profilePicPath = '';
 $stmt_pic = $conn->prepare("SELECT profile_pic FROM users WHERE username=?");
 $stmt_pic->bind_param("s", $username_to_delete);
@@ -46,7 +40,7 @@ $stmt_pic->bind_result($profilePicPath);
 $stmt_pic->fetch();
 $stmt_pic->close();
 
-// Delete user
+// ✅ Delete user
 $stmt_del = $conn->prepare("DELETE FROM users WHERE username=?");
 $stmt_del->bind_param("s", $username_to_delete);
 
